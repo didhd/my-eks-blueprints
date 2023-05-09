@@ -10,12 +10,10 @@ export default class PipelineConstruct extends Construct {
     const account = props?.env?.account!;
     const region = props?.env?.region!;
 
-    const addOn = new blueprints.addons.ArgoCDAddOn();
-
     const blueprint = blueprints.EksBlueprint.builder()
     .account(account)
     .region(region)
-    .addOns(addOn)
+    .addOns()
     .teams();
   
     blueprints.CodePipelineStack.builder()
@@ -28,7 +26,7 @@ export default class PipelineConstruct extends Construct {
       })
       .wave({
         id: "envs",
-        stages: [
+        stages: [   
           { id: "dev", stackBuilder: blueprint.clone('us-east-1')},
           { id: "prod", stackBuilder: blueprint.clone('ap-northeast-2')}
         ]
